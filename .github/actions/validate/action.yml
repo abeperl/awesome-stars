@@ -1,0 +1,21 @@
+name: Validate public directory
+description: Tests and generates sanitized static content on a GitHub-hosted runner
+runs:
+  using: composite
+  steps:
+    - name: Unit and privacy tests
+      shell: bash
+      run: python -m unittest discover -s tests -p 'test_*.py' -v
+    - name: Fetch public metadata and generate static directory
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      run: python scripts/directory.py
+    - name: Install bounded browser testing dependencies (runner only)
+      shell: bash
+      run: |
+        python -m pip install playwright==1.56.0
+        python -m playwright install chromium
+    - name: Real Chromium desktop and mobile checks
+      shell: bash
+      run: python tests/browser.py
