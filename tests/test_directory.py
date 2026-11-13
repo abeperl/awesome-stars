@@ -63,7 +63,8 @@ class DirectoryTests(unittest.TestCase):
             if len(calls)==1:
                 return [fixture()]*100,'<https://api.github.com/user/6117184/starred?per_page=100&page=2>; rel="next"'
             return [fixture(id=2)],''
-        result=d.collect(fetch)
+        with patch.object(Path,'exists',return_value=False):
+            result=d.collect(fetch)
         self.assertEqual(len(result['projects']),2)
         self.assertTrue(all('/users/abeperl/starred?' in url for url in calls))
 
