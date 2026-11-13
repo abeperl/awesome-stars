@@ -21,7 +21,7 @@ with sync_playwright() as p:
     errors=[]
     page.on('pageerror',lambda error:errors.append(str(error)))
     # Test production absolute URLs against the runner's local static server.
-    page.route('https://abeperl.github.io/awesome-stars/**',lambda route:route.continue_(url=route.request.url.replace('https://abeperl.github.io','http://127.0.0.1:8765')))
+    page.route('https://abeperl.github.io/awesome-stars/**',lambda route:route.fulfill(response=route.fetch(url=route.request.url.replace('https://abeperl.github.io','http://127.0.0.1:8765'))))
     page.goto('http://127.0.0.1:8765/awesome-stars/')
     page.wait_for_selector('article')
     assert page.locator('article').count()==count
