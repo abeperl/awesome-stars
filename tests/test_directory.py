@@ -55,6 +55,17 @@ class DirectoryTests(unittest.TestCase):
         for link in ['<https://evil.invalid/>; rel="next"','<https://api.github.com/user/starred>; rel="next"','<bad>; rel="next"']:
             with self.assertRaises(ValueError): d.collect(lambda url:([fixture()]*100,link))
 
+    def test_public_canonical_links_keep_named_requests(self):
+        calls=[]
+        def fetch(url):
+            calls.append(url)
+            if len(calls)==1:
+                return [fixture()]*100,'<https://api.github.com/user/6117184/starred?per_page=100&page=2>; rel="next"'
+            return [fixture(id=2)],''
+        result=d.collect(fetch)
+        self.assertEqual(len(result['projects']),2)
+        self.assertTrue(all('/users/abeperl/starred?' in url for url in calls))
+
     def test_failed_request_does_not_fallback(self):
         def broken(url): raise OSError('upstream unavailable')
         with self.assertRaises(OSError): d.collect(broken)

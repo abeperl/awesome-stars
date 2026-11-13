@@ -92,7 +92,10 @@ def collect(fetch=public_page):
             if 'rel="next"' in link: raise ValueError('Malformed pagination')
             break
         expected=f'https://api.github.com/users/abeperl/starred?per_page=100&page={page+1}'
-        if next_links != [expected] or len(data)!=100:
+        # GitHub canonicalizes public user links to its numeric user ID. Validate
+        # that exact public identity, but always request the named public endpoint.
+        canonical=f'https://api.github.com/user/6117184/starred?per_page=100&page={page+1}'
+        if len(next_links)!=1 or next_links[0] not in (expected,canonical) or len(data)!=100:
             raise ValueError('Incomplete pagination')
     else: raise ValueError('Pagination bound exceeded')
     if not result: raise ValueError('Empty snapshot refused')
