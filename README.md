@@ -2,7 +2,7 @@
 
 [Search the directory](https://abeperl.github.io/awesome-stars/) · [Reviewed Awesome list](https://abeperl.github.io/awesome-stars/reviewed/) · [Contribute](CONTRIBUTING.md)
 
-A public GitHub stars collection, **not endorsements**. 1,612 collected projects; 0 editorially reviewed. Snapshot: 2026-11-13.
+A public GitHub stars collection, **not endorsements**. 1,615 collected projects; 0 editorially reviewed. Snapshot: 2026-11-13.
 
 ## Reviewed Awesome list
 
@@ -15,11 +15,11 @@ Projects can appear in multiple categories. Public List mappings (Jewish GitHub 
 - [AI & Agents (238)](https://abeperl.github.io/awesome-stars/categories/ai-agents/)
 - [Data & Search (31)](https://abeperl.github.io/awesome-stars/categories/data-search/)
 - [Developer Tools (58)](https://abeperl.github.io/awesome-stars/categories/developer-tools/)
-- [Jewish GitHub (779)](https://abeperl.github.io/awesome-stars/categories/jewish-github/)
+- [Jewish GitHub (780)](https://abeperl.github.io/awesome-stars/categories/jewish-github/)
 - [Learning & Reference (16)](https://abeperl.github.io/awesome-stars/categories/learning-reference/)
 - [MCP (97)](https://abeperl.github.io/awesome-stars/categories/mcp/)
 - [Media & Creative (43)](https://abeperl.github.io/awesome-stars/categories/media-creative/)
-- [Needs Review (535)](https://abeperl.github.io/awesome-stars/categories/needs-review/)
+- [Needs Review (537)](https://abeperl.github.io/awesome-stars/categories/needs-review/)
 - [Security & Privacy (14)](https://abeperl.github.io/awesome-stars/categories/security-privacy/)
 - [Self-hosted (36)](https://abeperl.github.io/awesome-stars/categories/self-hosted/)
 - [Torah Library (103)](https://abeperl.github.io/awesome-stars/categories/torah-library/)
@@ -534,6 +534,7 @@ Projects can appear in multiple categories. Public List mappings (Jewish GitHub 
 - [chenpaz123/Ktv-Translate](https://github.com/chenpaz123/Ktv-Translate) — No description supplied (Python; Unspecified)
 - [chepti/FocuSchool](https://github.com/chepti/FocuSchool) — No description supplied (TypeScript; Unspecified)
 - [chfle/chfle](https://github.com/chfle/chfle) — No description supplied (Unknown; Unspecified)
+- [ClueMec1/yiddish-keyboard](https://github.com/ClueMec1/yiddish-keyboard) — a yiddish-keyboard (Kotlin; Unspecified)
 - [Codefather-Studio/TorahWEBGL](https://github.com/Codefather-Studio/TorahWEBGL) — No description supplied (HTML; Unspecified)
 - [codemors/dodge-game](https://github.com/codemors/dodge-game) — הנצחון האמיתי — Hebrew dodge arcade game (pygame) (Python; Unspecified)
 - [Codesh-Organization-Foundation-Inc/Codesh-Compiler](https://github.com/Codesh-Organization-Foundation-Inc/Codesh-Compiler) — The Motzi B&#x27;She&#x27;ela - Official compiler for the Codesh programming language. (C++; GPL-3.0)
@@ -1342,6 +1343,7 @@ Projects can appear in multiple categories. Public List mappings (Jewish GitHub 
 - [AnLoMinus/StrikeGuide](https://github.com/AnLoMinus/StrikeGuide) — מאגר: איזה מכות אתה הולך לקבל 🔥⚖️ (JavaScript; NOASSERTION)
 - [AnthonyDavidAdams/zero-employee-company-book](https://github.com/AnthonyDavidAdams/zero-employee-company-book) — Headcount Zero: How to Build an AI-Run Company with Paperclip (Unknown; Unspecified)
 - [Arephan/quebec-er-wait-times](https://github.com/Arephan/quebec-er-wait-times) — Hourly archive of emergency-room occupancy at all 120 Quebec EDs, from the MSSS open data feed. CSV + stdlib fetch script. (Python; MIT)
+- [aribennett1/al-iz-git](https://github.com/aribennett1/al-iz-git) — No description supplied (JavaScript; MIT)
 - [aribennett1/Pasuk-Finder](https://github.com/aribennett1/Pasuk-Finder) — No description supplied (HTML; Unspecified)
 - [arieldaniely/otzariaAI](https://github.com/arieldaniely/otzariaAI) — No description supplied (HTML; Unspecified)
 - [Arithmomaniac/JoelRichPodcast](https://github.com/Arithmomaniac/JoelRichPodcast) — No description supplied (C#; MIT)
@@ -1650,6 +1652,7 @@ Projects can appear in multiple categories. Public List mappings (Jewish GitHub 
 - [nuitrcs/artificial\_intelligence\_for\_research](https://github.com/nuitrcs/artificial_intelligence_for_research) — No description supplied (Unknown; Unspecified)
 - [nuno-joao-andrade-dev/devfest-2026-krakow](https://github.com/nuno-joao-andrade-dev/devfest-2026-krakow) — No description supplied (HTML; Unspecified)
 - [NVIDIA/NemoClaw](https://github.com/NVIDIA/NemoClaw) — Run agents like Hermes, LangChain Deep Agents, and OpenClaw more securely inside NVIDIA OpenShell with managed inference (TypeScript; Apache-2.0)
+- [ofekhatecoding-dot/Who-is-doing-the-dishes-](https://github.com/ofekhatecoding-dot/Who-is-doing-the-dishes-) — No description supplied (JavaScript; Unspecified)
 - [ofer-geo/israel\_train\_stations\_project](https://github.com/ofer-geo/israel_train_stations_project) — No description supplied (Python; MIT)
 - [Office1480/Nahman-Studio](https://github.com/Office1480/Nahman-Studio) — No description supplied (Python; Unspecified)
 - [Office1480/Tsedaka-App](https://github.com/Office1480/Tsedaka-App) — No description supplied (JavaScript; Unspecified)
