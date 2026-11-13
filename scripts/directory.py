@@ -25,7 +25,7 @@ RULES = {
     'Jewish GitHub': r'\b(jewish|judaism|hebrew|yiddish|torah|talmud|sefaria)\b',
     'Torah Library': r'\b(torah library|sefaria|talmud|tanakh)\b',
 }
-FIELDS = {'id','name','url','description','topics','language','license','stars','updated_at','starred_at','archived','fork','website','categories','category_source','reviewed'}
+FIELDS = {'id','name','url','description','topics','language','license','stars','updated_at','starred_at','archived','fork','website','categories','category_source','reviewed','review_note'}
 
 def safe_url(value):
     if not isinstance(value, str) or any(c.isspace() or ord(c)<32 for c in value):
@@ -41,7 +41,7 @@ def clean(value, limit=1000):
 
 def sanitize(item, lists, overrides):
     r = item.get('repo', {})
-    if r.get('private') is not False or r.get('visibility', 'public') != 'public':
+    if r.get('private') is not False or r.get('visibility') != 'public':
         return None
     name = r.get('full_name', '')
     if not re.fullmatch(r'[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+', name) or type(r.get('id')) is not int:
@@ -60,7 +60,8 @@ def sanitize(item, lists, overrides):
                 stars=max(0,int(r.get('stargazers_count',0))),updated_at=clean(r.get('updated_at'),40),starred_at=clean(item.get('starred_at'),40),
                 archived=r.get('archived') is True,fork=r.get('fork') is True,website=safe_url(r.get('homepage')),
                 categories=categories,category_source='manual override' if manual.get('categories') else 'public list + metadata' if explicit else 'metadata rules' if inferred else 'unclassified',
-                reviewed=manual.get('reviewed') is True and bool(manual.get('review_note')))
+                reviewed=manual.get('reviewed') is True and bool(re.match(r'^\d{4}-\d{2}-\d{2}: .{20,}', manual.get('review_note',''))),
+                review_note=clean(manual.get('review_note')) if manual.get('reviewed') is True else '')
 
 def public_page(url):
     # Never accept another endpoint, host or redirect, even from a Link header.
@@ -86,7 +87,9 @@ def collect(fetch=public_page):
         for item in data:
             row=sanitize(item,lists,overrides)
             if row: result[row['id']]=row
-        if not link: break
+        if not link:
+            if len(data)==100: raise ValueError('Full page missing pagination')
+            break
         next_links=re.findall(r'<([^>]+)>;\s*rel="next"',link)
         if not next_links: 
             if 'rel="next"' in link: raise ValueError('Malformed pagination')
@@ -110,7 +113,7 @@ def card(r):
     attrs={'name':r['name'].lower(),'search':' '.join([r['name'],r['description'],*r['topics'],*r['categories']]).lower(),'language':r['language'],'license':r['license'],'status':'Archived' if r['archived'] else 'Active','stars':r['stars'],'updated':r['updated_at'],'starred':r['starred_at'],'reviewed':str(r['reviewed']).lower()}
     data=' '.join(f'data-{k}="{esc(v)}"' for k,v in attrs.items())
     badges=['Collected']+(['Reviewed'] if r['reviewed'] else [])+(['Archived'] if r['archived'] else [])+(['Fork'] if r['fork'] else [])
-    return f'<article class="card" {data}><div class="badges">'+''.join(f'<span>{b}</span>' for b in badges)+f'</div><h2><a href="{esc(r["url"])}">{esc(r["name"])}</a></h2><p>{esc(r["description"] or "No description supplied")}</p><p class="meta">{esc(r["language"])} · {esc(r["license"])} · ★ {r["stars"]:,}</p><p class="tags">'+ ' '.join(f'<a href="{BASE}categories/{slug(c)}/">{esc(c)}</a>' for c in r['categories'])+f'</p><p class="meta">Classification: {esc(r["category_source"])} · Updated {esc(r["updated_at"][:10])}</p>'+ (f'<a href="{esc(r["website"])}" rel="noopener noreferrer">Project website ↗</a>' if r['website'] else '')+'</article>'
+    return f'<article class="card" {data}><div class="badges">'+''.join(f'<span>{b}</span>' for b in badges)+f'</div><h2><a href="{esc(r["url"])}">{esc(r["name"])}</a></h2><p>{esc(r["description"] or "No description supplied")}</p><p class="meta">{esc(r["language"])} · {esc(r["license"])} · ★ {r["stars"]:,}</p><p class="tags">'+ ' '.join(f'<a href="{BASE}categories/{slug(c)}/">{esc(c)}</a>' for c in r['categories'])+f'</p><p class="meta">Classification: {esc(r["category_source"])} · Updated {esc(r["updated_at"][:10])}</p>'+ (f'<a href="{esc(r["website"])}" rel="noopener noreferrer">Project website ↗</a>' if r['website'] else '')+(f'<p>Review note: {esc(r["review_note"])}</p>' if r['reviewed'] else '')+'</article>'
 
 def page(title,description,rows,path,snapshot,extra=''):
     def select(key,label,values):
@@ -147,11 +150,11 @@ A public GitHub stars collection, **not endorsements**. {len(rows):,} collected 
 
 ## Reviewed Awesome list
 
-No projects have completed editorial review yet. Collection, public GitHub List membership, and automatic classification do not qualify as review. See [editorial criteria](CONTRIBUTING.md).
+{'No projects have completed editorial review yet.' if not any(r['reviewed'] for r in rows) else 'Read the dated review notes on the reviewed list page.'} Collection, public GitHub List membership, and automatic classification do not qualify as review. See [editorial criteria](CONTRIBUTING.md).
 
 ## Browse the collection
 
-Projects can appear in multiple categories. Public List mappings (Jewish GitHub and Torah Library) precede deterministic topic/description rules; ambiguous projects remain Needs Review. Missing descriptions are reported honestly. List membership snapshot is dated in config/public-lists.json; metadata refreshes daily. No paid recommendations or tracking.
+Projects can appear in multiple categories. Public List mappings (Jewish GitHub and Torah Library) combine with deterministic topic/description rules; manual category overrides take precedence. Projects without any match remain Needs Review. Missing descriptions are reported honestly. List membership snapshot is dated in config/public-lists.json; metadata refreshes daily. No paid recommendations or tracking.
 
 '''
     for c in categories:

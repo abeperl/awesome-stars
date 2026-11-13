@@ -14,7 +14,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def log_message(self,*args): pass
 server=http.server.ThreadingHTTPServer(('127.0.0.1',8765),functools.partial(Handler,directory=str(root)))
 threading.Thread(target=server.serve_forever,daemon=True).start()
-count=len(json.loads((root/'data/catalog.json').read_text())['projects'])
+projects=json.loads((root/'data/catalog.json').read_text())['projects']
+count=len(projects)
 with sync_playwright() as p:
     browser=p.chromium.launch()
     page=browser.new_page(viewport={'width':1440,'height':1000})
@@ -34,6 +35,7 @@ with sync_playwright() as p:
     assert page.locator('article:visible').count()==count
     page.select_option('#status','Archived')
     page.wait_for_timeout(350)
+    assert page.locator('article:visible').count()==sum(r['archived'] for r in projects)
     for c in page.locator('article:visible').all(): assert c.get_attribute('data-status')=='Archived'
     page.select_option('#status','')
     page.select_option('#sort','stars')

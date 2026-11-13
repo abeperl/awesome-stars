@@ -6,6 +6,7 @@ import tempfile
 
 spec=importlib.util.spec_from_file_location('directory',Path(__file__).resolve().parents[1]/'scripts/directory.py')
 d=importlib.util.module_from_spec(spec)
+assert spec is not None and spec.loader is not None
 spec.loader.exec_module(d)
 
 def fixture(**kwargs):
@@ -44,7 +45,7 @@ class DirectoryTests(unittest.TestCase):
         self.assertIn('MCP',r['categories'])
         self.assertIn('Jewish GitHub',r['categories'])
         self.assertFalse(r['reviewed'])
-        r=d.sanitize(fixture(),{}, {'1':{'categories':['Torah Library'],'reviewed':True,'review_note':'Human evidence'}})
+        r=d.sanitize(fixture(),{}, {'1':{'categories':['Torah Library'],'reviewed':True,'review_note':'2026-11-13: Human evidence and documentation review completed.'}})
         self.assertEqual(r['categories'],['Torah Library'])
         self.assertTrue(r['reviewed'])
 
@@ -65,6 +66,9 @@ class DirectoryTests(unittest.TestCase):
         result=d.collect(fetch)
         self.assertEqual(len(result['projects']),2)
         self.assertTrue(all('/users/abeperl/starred?' in url for url in calls))
+
+    def test_full_page_without_link_fails_closed(self):
+        with self.assertRaises(ValueError): d.collect(lambda url:([fixture()]*100,''))
 
     def test_failed_request_does_not_fallback(self):
         def broken(url): raise OSError('upstream unavailable')

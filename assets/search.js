@@ -5,6 +5,7 @@ const fields = ['search', 'language', 'license', 'status', 'sort'];
 const inputs = Object.fromEntries(fields.map(k => [k, document.getElementById(k)]));
 const params = new URLSearchParams(location.search);
 for (const k of fields) if (params.has(k)) inputs[k].value = params.get(k);
+let lastOrder = null;
 function apply() {
   const query = inputs.search.value.trim().toLowerCase();
   let count = 0;
@@ -14,10 +15,13 @@ function apply() {
     if (match) count++;
   }
   const order = inputs.sort.value;
-  cards.sort((a, b) => order === 'stars' ? Number(b.dataset.stars) - Number(a.dataset.stars) : order === 'updated' || order === 'starred' ? b.dataset[order].localeCompare(a.dataset[order]) : a.dataset.name.localeCompare(b.dataset.name));
-  const fragment = document.createDocumentFragment();
-  for (const card of cards) fragment.append(card);
-  container.append(fragment);
+  if (order !== lastOrder) {
+    cards.sort((a, b) => order === 'stars' ? Number(b.dataset.stars) - Number(a.dataset.stars) : order === 'updated' || order === 'starred' ? b.dataset[order].localeCompare(a.dataset[order]) : a.dataset.name.localeCompare(b.dataset.name));
+    const fragment = document.createDocumentFragment();
+    for (const card of cards) fragment.append(card);
+    container.append(fragment);
+    lastOrder = order;
+  }
   document.getElementById('count').textContent = `${count.toLocaleString()} projects`;
   document.getElementById('empty').hidden = count !== 0;
   const state = new URLSearchParams();
